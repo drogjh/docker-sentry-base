@@ -1,4 +1,4 @@
-FROM sentry:8.15-onbuild
+FROM sentry:8.21-onbuild
 
 # Install env
 RUN apt-get update && apt-get install -y \

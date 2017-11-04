@@ -34,13 +34,11 @@
 #  BITBUCKET_CONSUMER_KEY
 #  BITBUCKET_CONSUMER_SECRET
 from sentry.conf.server import *  # NOQA
-from sentry.utils.types import Bool
 
 import os
 import os.path
 
 CONF_ROOT = os.path.dirname(__file__)
-env = os.environ.get
 
 postgres = env('SENTRY_POSTGRES_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
 if postgres:
@@ -110,11 +108,11 @@ SENTRY_USE_BIG_INTS = True
 ###########
 
 # Allow users to create a new account
-SENTRY_FEATURES["auth:register"] = Bool(env('SENTRY_ALLOW_REGISTRATION', True))
+SENTRY_FEATURES["auth:register"] = env('SENTRY_ALLOW_REGISTRATION', True)
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-SENTRY_SINGLE_ORGANIZATION = Bool(env('SENTRY_SINGLE_ORGANIZATION', True))
+SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION', True)
 
 #########
 # Redis #
@@ -269,7 +267,7 @@ SENTRY_OPTIONS['filestore.options'] = {
 # If you're using a reverse SSL proxy, you should enable the X-Forwarded-Proto
 # header and set `SENTRY_USE_SSL=1`
 
-if Bool(env('SENTRY_USE_SSL', False)):
+if env('SENTRY_USE_SSL', False):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -293,7 +291,7 @@ if email:
     SENTRY_OPTIONS['mail.password'] = env('SENTRY_EMAIL_PASSWORD') or ''
     SENTRY_OPTIONS['mail.username'] = env('SENTRY_EMAIL_USER') or ''
     SENTRY_OPTIONS['mail.port'] = int(env('SENTRY_EMAIL_PORT') or 25)
-    SENTRY_OPTIONS['mail.use-tls'] = Bool(env('SENTRY_EMAIL_USE_TLS', False))
+    SENTRY_OPTIONS['mail.use-tls'] = env('SENTRY_EMAIL_USE_TLS', False)
 else:
     SENTRY_OPTIONS['mail.backend'] = 'dummy'
 
@@ -308,7 +306,7 @@ SENTRY_OPTIONS['mail.mailgun-api-key'] = env('SENTRY_MAILGUN_API_KEY') or ''
 if SENTRY_OPTIONS['mail.mailgun-api-key']:
     SENTRY_OPTIONS['mail.enable-replies'] = True
 else:
-    SENTRY_OPTIONS['mail.enable-replies'] = Bool(env('SENTRY_ENABLE_EMAIL_REPLIES', False))
+    SENTRY_OPTIONS['mail.enable-replies'] = env('SENTRY_ENABLE_EMAIL_REPLIES', False)
 
 if SENTRY_OPTIONS['mail.enable-replies']:
     SENTRY_OPTIONS['mail.reply-hostname'] = env('SENTRY_SMTP_HOSTNAME') or ''
